@@ -51,12 +51,14 @@ class OrderController extends Controller
         $rules = array('area_id' => 'max:10',
             'address' => 'max:10','product_id' => 'max:10',
             'quantity' => 'required|numeric',
+            'date' => 'required',
             'user_id' => 'required|max:10|numeric');
         if (isset($request->is_new_customer)){
          $rules = array('area_id' => 'max:10',
             'address' => 'max:10',
             'product_id' => 'max:10',
             'quantity' => 'required|numeric',
+            'date' => 'required',
             'user_id' => 'required|max:10|numeric',
             'email' => 'max:155|unique:users',
             'full_name' => 'required|max:155',
@@ -80,13 +82,20 @@ class OrderController extends Controller
         ]);
         $customer_id = $create_user->id;
         }
+        if (isset($request->date)) {
+           $order_date = $request_date;
+        }else{
+            $order_date =  now();
+        }
+        $identification_number = substr(str_shuffle(MD5(microtime())), 0, 10);
         $create_order = Order::create([
             
             'user_id' => $customer_id,
             'area_id' => $request->area_id,
             'address' => $request->address,
             'status' => $request->status,
-            'date' => now(),
+            'identification_number' => $identification_number,
+            'date' => $order_date,
         ]);
         if ($create_order) {
             $create_orderItem =  OrderItem::create([
@@ -116,10 +125,17 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
-    }
+        $find_order = Order::with('area','user','order_items','order_items.product')->find($request->id);
+        if($find_order){
+            return response()->json([
+                'success'=> true,
+                'message' => 'Order Deleted Successfully',
+                'order' => $find_order,
+               ]);
+            }
+     }
 
     /**
      * Show the form for editing the specified resource.

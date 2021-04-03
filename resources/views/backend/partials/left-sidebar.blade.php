@@ -4,7 +4,7 @@
     <div class="topbar-left">
         <div class="">
             <!--<a href="index.html" class="logo text-center">Fonik</a>-->
-            <a href="index.html" class="logo"><img src="{{asset('backend/assets/images/logo.png')}}" height="20" alt="logo"></a>
+            <a href="{{route('admin.dashboard')}}" class="logo"><img src="{{asset('backend/assets/images/logo.png')}}" height="20" alt="logo"></a>
         </div>
     </div>
 
@@ -15,7 +15,7 @@
                 <li class="menu-title">Main</li>
 
                 <li>
-                    <a href="index.html" class="waves-effect"><i class="dripicons-device-desktop"></i><span> Dashboard </span></a>
+                    <a href="{{route('admin.dashboard')}}" class="waves-effect"><i class="dripicons-device-desktop"></i><span> Dashboard </span></a>
                     <a href="{{route('admin.user.index')}}" class="waves-effect"><i class="dripicons-device-desktop"></i><span>User </span></a>
                     <a href="{{route('admin.order.index')}}" class="waves-effect"><i class="dripicons-device-desktop"></i><span>Order </span></a>
                     <a href="{{route('admin.area.index')}}" class="waves-effect"><i class="dripicons-device-desktop"></i><span>Area </span></a>

@@ -56,12 +56,13 @@ class OrderController extends Controller
 
             ), 400); // 400 being the HTTP code for an invalid request.
         }
-        
+        $identification_number = substr(str_shuffle(MD5(microtime())), 0, 10);
         $create_order =  Order::create([
             'user_id' => Auth::user()->id,
             'address' => $request->address,
             'area_id' => $request->area_id,
             'status' => 'placed',
+            'identification_number' => $identification_number,
             'date' => now(),
         ]);
         if ($create_order) {

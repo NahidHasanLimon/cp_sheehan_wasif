@@ -251,8 +251,9 @@ $(document).ready(function() {
                    success: function(data) {
                     if (data.success==true) {
                       toastr.success("Added Successfully");
-                      var status_action_icon = data.user.is_admin==0?'<i class="mdi mdi-account-plus"></i>':'<i class="mdi mdi-account-minus"></i>';
-                      var status_action_badge = data.user.is_admin==1?' <span class="badge badge-pink">Admin</span>':'<span class="badge badge-pink">Admin</span>';
+                    //   var status_action_icon = data.user.is_admin==0?'<i class="mdi mdi-account-plus"></i>':'<i class="mdi mdi-account-minus"></i>';
+                      var status_action_icon = '<i class="mdi mdi-account-plus"></i>';
+                      var status_action_badge = data.user.is_admin==0?' <span class="badge badge-pink">Admin</span>' :'';
                       var order_table=$('#order_table').DataTable();
                                             order_table.row.add( [
                                                   ""+data.user.full_name+"   "+status_action_badge+"",
@@ -270,8 +271,6 @@ $(document).ready(function() {
                  },
                  error: function(data,xhr) {
                     validationPrintErrorMsg(data,xhr);
-                    console.log( JSON.stringify(data) );
-                    console.log(data.status);
                    
                     
                      }

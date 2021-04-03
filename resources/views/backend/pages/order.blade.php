@@ -15,6 +15,9 @@
            text-align: center;
           vertical-align: middle!important;
            }
+           /* for print  */
+            
+           /* for print  */
      </style>
 @endsection
 @section('main-page-content')
@@ -29,7 +32,8 @@
                 <table id="order_table" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                     <thead>
                     <tr>
-                        {{-- <th>Sl#</th> --}}
+                        <th>Sl#</th>
+                        <th>O. Number#</th>
                         <th>Date</th>
                         <th>Area</th>
                         <th>Address</th>
@@ -37,27 +41,27 @@
                         <th>Action</th>
                     </tr>
                     </thead>
-
-
                     <tbody>
                         @foreach ($orders as $order)
                         <tr data-id={{$order->id}}>
-                            {{-- <td>{{ $loop->index+1 }}</td> --}}
+                            <td>{{ $loop->index+1 }}</td>
+                            <td>{{$order->identification_number}}</td>
                             <td>
-                                {{ \Carbon\Carbon::parse($order->created_at)->format(' jS \\of F Y h:i A') }}
+                                {{ \Carbon\Carbon::parse($order->created_at)->format(' jS  F Y') }}
                               </td>
                             <td>{{$order->area->name}}</td>
                             <td>{{$order->address}}</td>
                             <td>
                                 {{-- {{$order->status}} --}}
-                                <select name="order_status" class="btn btn-mini order-status">
-                                    <option value="placed" {{$order->status=='placed'? 'active' :''}}>Placed</option>
-                                    <option value="confirmed"{{$order->status=='confirmed'? 'active': ''}}>Confirmed</option>
-                                    <option value="delivered"{{$order->status=='delivered'? 'active': ''}}>Delivered</option>
+                                {{-- btn btn-mini --}}
+                                <select name="order_status" class="form-control order-status">
+                                    <option  value="placed" {{$order->status==='placed'? 'selected' :''}}>Placed</option>
+                                    <option value="confirmed"{{$order->status==='confirmed'? 'selected' : ''}}>Confirmed</option>
+                                    <option value="delivered"{{$order->status==='delivered'? 'selected' : ''}}>Delivered</option>
                                 </select>
                             </td>
                             <td>
-                                <button type='button' class='btn btn-dark waves-effect waves-light change-admin-status'>
+                                <button type='button' class='btn btn-dark waves-effect waves-light view-order'>
                                     <i class='mdi mdi-eye'></i> </button>
                                  <button type='button' class='btn btn-dark waves-effect waves-light edit-order'><i class='mdi mdi-pencil'></i></button>
                                  <button type='button' class='btn btn-danger waves-effect waves-light delete-order'><i class='mdi mdi-delete'></i></button>
@@ -74,8 +78,8 @@
 </div> <!-- end row -->
 <!-- Start modal Including-->
 <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="add_order_modal">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content px-4">
             <div class="modal-header">
                 <h5 class="modal-title mt-0" id="mySmallModalLabel">Add Order</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -189,6 +193,110 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<!-- End of  modal Including-->
+<!-- Start modal Including-->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="view_order_modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content px-4">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="mySmallModalLabel">Order Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card m-b-20">
+                            <div class="card-body">
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="invoice-title">
+                                            <h4 class="float-right font-16"><strong>Order # <span id="identification_number_view"></span></strong></h4>
+                                            <h3 class="mt-0">
+                                                <img src="{{asset('backend/assets/images/logo_dark.png')}}" alt="logo" height="26"/>
+                                            </h3>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <address>
+                                                    <strong>Customer Details:</strong><br>
+                                                    <span id="customer_name_view"></span>   <br>
+                                                    <span id="phone_number_view"></span> <br>
+                                                    <span id="customer_email_view"></span>
+                                                </address>
+                                            </div>
+                                            <div class="col-6 text-right">
+                                                <address>
+                                                    <strong>Order Address</strong><br>
+                                                   <span id="order_area_view"></span><br>
+                                                   <span id="order_address_view"></span><br>
+                                                </address>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6 m-t-30">
+                                                <address>
+                                                    <strong>Payment Method:</strong><br>
+                                                   Cash On Delivery
+                                                </address>
+                                            </div>
+                                            <div class="col-6 m-t-30 text-right">
+                                                <address>
+                                                    <strong>Order Date:</strong><br>
+                                                    <span id="order_date_view"><br><br>
+                                                </address>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="panel panel-default">
+                                            <div class="p-2">
+                                                <h3 class="panel-title font-20"><strong>Order summary</strong></h3>
+                                            </div>
+                                            <div class="">
+                                                <div class="table-responsive">
+                                                    <table class="table" id="order_items_table_view">
+                                                        <thead>
+                                                        <tr>
+                                                            <td><strong>Item</strong></td>
+                                                            <td class="text-center"><strong>Price</strong></td>
+                                                            <td class="text-center"><strong>Quantity</strong>
+                                                            </td>
+                                                            <td class="text-right"><strong>Totals</strong></td>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        
+                                                        
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                                <div class="d-print-none">
+                                                    <div class="float-right">
+                                                        <a href="javascript:window.print()" class="btn btn-success waves-effect waves-light"><i class="fa fa-print"></i></a>
+                                                        {{-- <a href="#" class="btn btn-primary waves-effect waves-light">Send</a> --}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div> <!-- end row -->
+
+                            </div>
+                        </div>
+                    </div> <!-- end col -->
+                </div> <!-- end row -->
+            </div>
+            
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <!-- End of  modal Including-->
 @endsection
@@ -262,8 +370,8 @@ $(document).ready(function() {
                  },
                  error: function(data,xhr) {
                     validationPrintErrorMsg(data,xhr);
-                    console.log( JSON.stringify(data) );
-                    console.log(data.status);
+                    // console.log( JSON.stringify(data) );
+                    // console.log(data.status);
                    
                     
                      }
@@ -274,7 +382,6 @@ $(document).ready(function() {
         // var id = $(this).data('id');
         var tr = $(this).closest('tr');
         var id = tr.data('id');
-       console.log(id);
                $.ajax({
                  type : "get",
                  url : "{{route('admin.order.destroy')}}",
@@ -326,10 +433,60 @@ $(document).ready(function() {
                  },
                    success: function(data) {
                     if (data.success==true) {
-                      toastr.success("Deleted Successfully");
+                      toastr.success("Changed Successfully");
                     //   tr.fadeOut(1000, function(){
                     //         $(this).remove();
                     //     });
+                    }
+                    else{
+                        toastr.error("Failed to delete");
+                    }
+                 },
+                 complete: function() {
+                //    $("#submit_signup").prop('disabled', false); // disable button
+                 },
+                 error: function(data,xhr) {
+                    validationPrintErrorMsg(data,xhr);
+                    
+                     }
+               });
+            });
+            $(document).on('click','.view-order',function(e) {
+               var tr = $(this).closest('tr');
+               var id = tr.data('id');
+               console.log(id);
+               var status = $(this).val();
+               console.log(status);
+               $.ajax({
+                 type : "get",
+                 url : "{{route('admin.order.show')}}",
+                 data: {
+                         id:id,
+                         status:status,
+                       },
+                 dataType:'JSON',
+                 beforeSend: function() {
+              
+                 },
+                   success: function(data) {
+                    if (data.success==true) {
+                        $('#view_order_modal').modal('show');
+                        
+                        $('#identification_number_view').empty().text(data.order.identification_number);
+
+                        $('#customer_name_view').empty().text(data.order.user.full_name);
+                        $('#customer_email_view').empty().text(data.order.user.email);
+                        $('#phone_number_view').empty().text(data.order.user.phone_number);
+
+                        $('#order_area_view').empty().text(data.order.area.name);
+                        $('#order_address_view').empty().text(data.order.address);
+
+                        $('#order_date_view').empty().text(data.order.date);
+                        $.each(data.order.order_items, function(index, data){
+                            var individual_total = data.quantity * parseInt(data.product.price);
+                             $("#order_items_table_view > tbody:last-child").append("<tr><td>"+data.product.name+"</td><td>"+data.product.price+"</td><td>"+data.quantity+"</td><td>"+individual_total+"</td></tr>");
+                        // $(table_id).append("<tr><td>" + this.pathologie + "</td><td>" + this.mois+ "</td></tr>");
+                        });
                     }
                     else{
                         toastr.error("Failed to delete");

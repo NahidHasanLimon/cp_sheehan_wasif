@@ -53,7 +53,6 @@ class UserController extends Controller
         }
         
         $create_user =  User::create([
-            
             'full_name' => $request->full_name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
@@ -63,7 +62,7 @@ class UserController extends Controller
             return response()->json([
                 'success'=> true,
                 'message' => 'Area Created Successfully',
-                'user' => $create_user,
+                'user' => $create_user->refresh(),
                ]);
         }
         return response()->json([

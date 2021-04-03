@@ -33,13 +33,14 @@ Route::get('/clear-cache', function() {
     $exitCode = Artisan::call('config:cache');
     return 'DONE'; //Return anything
 });
-Route::get('/b', function () {
+Route::get('dashboard', function () {
     return view('backend.pages.blank');
-});
+})->name('admin.dashboard');
 
 
 
 Route::get('/order/index', 'Backend\OrderController@index')->name('admin.order.index');
+Route::get('/order/show', 'Backend\OrderController@show')->name('admin.order.show');
 Route::post('/order/store', 'Backend\OrderController@store')->name('admin.order.store');
 Route::get('/order/destroy', 'Backend\OrderController@destroy')->name('admin.order.destroy');
 Route::get('/order/edit', 'Backend\OrderController@edit')->name('admin.order.edit');
@@ -58,3 +59,10 @@ Route::get('/user/destroy', 'Backend\UserController@destroy')->name('admin.user.
 Route::get('/user/edit', 'Backend\UserController@edit')->name('admin.user.edit');
 Route::post('/user/update', 'Backend\UserController@update')->name('admin.user.update');
 Route::get('/user/admin/isadminstatuschange', 'Backend\UserController@is_admin_status_change')->name('admin.user.isadminstatuschange');
+
+Route::prefix('admin')->group(function() {
+    Route::get('/login','Auth\AdminLoginController@showLoginForm')->name('admin.login');
+    Route::post('/login', 'Auth\AdminLoginController@login')->name('admin.login.submit');
+    Route::get('logout/', 'Auth\AdminLoginController@logout')->name('admin.logout');
+    // Route::get('/', 'Auth\AdminController@index')->name('admin.dashboard');
+   }) ;

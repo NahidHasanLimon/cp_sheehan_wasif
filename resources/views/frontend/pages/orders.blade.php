@@ -29,6 +29,7 @@
               <table class="table table-responsive" id="order_table">
                 <thead>
                   <th>Sl.</th>
+                  <th>O. Number</th>
                   <th>Date</th>
                   <th>Status</th>
                   <th>Area</th>
@@ -40,8 +41,9 @@
                   @foreach ($orders as $order)
                       <tr>
                         <td>{{ $loop->index+1 }}</td>
+                        <td>{{ $order->identification_number }}</td>
                         <td>
-                          {{ \Carbon\Carbon::parse($order->created_at)->format(' jS \\of F Y h:i A') }}
+                          {{ \Carbon\Carbon::parse($order->date)->format(' jS  F Y') }}
                         </td>
                         <td>{{$order->status}}</td>
                         <td>{{$order->area->name}}</td>

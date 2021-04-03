@@ -9,6 +9,9 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use Notifiable;
+    
+    protected $guard = 'admin';
+
     public function orders()
     {
         return $this->hasMany('App\Order');

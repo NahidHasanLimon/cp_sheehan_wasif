@@ -20,6 +20,7 @@ class CreateOrdersTable extends Migration
             $table->string('status')->nullable();
             $table->string('address')->nullable();
             $table->timestamp('date');
+            $table->string('identification_number');
             // $table->timestamp('o')->useCurrent();
             $table->timestamps();
             // $table->foreign('user_id')->references('id')->on('users');
