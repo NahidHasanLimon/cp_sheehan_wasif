@@ -14,6 +14,47 @@
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-Route::get('/', function () {
-    return view('frontend.pages.home');
+// Route::get('/', function () {
+//     return view('frontend.pages.home');
+// });
+Route::get('/','FrontEnd\HomeController@index')->name('customer.home');
+Auth::routes();
+Route::post('customer/login','Auth\CustomerLoginController@storeCustomerLogin')->name('customer.login');
+Route::post('customer/signup','Auth\CustomerLoginController@signup')->name('customer.signup');
+
+
+Route::get('customer/order/index','FrontEnd\OrderController@index')->name('customer.order.index');
+Route::post('customer/order/store','FrontEnd\OrderController@store')->name('customer.order.store');
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/clear-cache', function() {
+    $exitCode = Artisan::call('cache:clear');
+    $exitCode = Artisan::call('config:cache');
+    return 'DONE'; //Return anything
 });
+Route::get('/b', function () {
+    return view('backend.pages.blank');
+});
+
+
+
+Route::get('/order/index', 'Backend\OrderController@index')->name('admin.order.index');
+Route::post('/order/store', 'Backend\OrderController@store')->name('admin.order.store');
+Route::get('/order/destroy', 'Backend\OrderController@destroy')->name('admin.order.destroy');
+Route::get('/order/edit', 'Backend\OrderController@edit')->name('admin.order.edit');
+Route::post('/order/update', 'Backend\OrderController@update')->name('admin.order.update');
+Route::get('/order/statuschange', 'Backend\OrderController@change_order_status')->name('admin.order.statuschange');
+
+Route::get('/area/index', 'Backend\AreaController@index')->name('admin.area.index');
+Route::post('/area/store', 'Backend\AreaController@store')->name('admin.area.store');
+Route::get('/area/destroy', 'Backend\AreaController@destroy')->name('admin.area.destroy');
+Route::get('/area/edit', 'Backend\AreaController@edit')->name('admin.area.edit');
+Route::post('/area/update', 'Backend\AreaController@update')->name('admin.area.update');
+
+Route::get('/user/index', 'Backend\UserController@index')->name('admin.user.index');
+Route::post('/user/store', 'Backend\UserController@store')->name('admin.user.store');
+Route::get('/user/destroy', 'Backend\UserController@destroy')->name('admin.user.destroy');
+Route::get('/user/edit', 'Backend\UserController@edit')->name('admin.user.edit');
+Route::post('/user/update', 'Backend\UserController@update')->name('admin.user.update');
+Route::get('/user/admin/isadminstatuschange', 'Backend\UserController@is_admin_status_change')->name('admin.user.isadminstatuschange');

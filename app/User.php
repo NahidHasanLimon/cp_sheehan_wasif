@@ -9,14 +9,17 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use Notifiable;
-
+    public function orders()
+    {
+        return $this->hasMany('App\Order');
+    }
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'full_name', 'email', 'password','phone_number','is_admin','is_active',
     ];
 
     /**
